@@ -1,9 +1,7 @@
 package Vista;
 
 import Conexiones.Conexion;
-import Controlador.ClienteController;
 import Controlador.LoginController;
-import Modelo.Cliente;
 import Modelo.Usuario;
 
 import java.awt.HeadlessException;

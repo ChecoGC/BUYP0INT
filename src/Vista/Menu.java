@@ -34,9 +34,6 @@ public class Menu extends javax.swing.JFrame {
         jmiNuevoProducto = new javax.swing.JMenuItem();
         jmiGestionarProducto = new javax.swing.JMenuItem();
         jmiActualizarInventario = new javax.swing.JMenuItem();
-        jMenu3 = new javax.swing.JMenu();
-        jmiNuevoCliente = new javax.swing.JMenuItem();
-        jmiGestionarCliente = new javax.swing.JMenuItem();
         jMenu4 = new javax.swing.JMenu();
         jmiNuevaCategoria = new javax.swing.JMenuItem();
         jmiGestionarCategoria = new javax.swing.JMenuItem();
@@ -124,35 +121,6 @@ public class Menu extends javax.swing.JFrame {
         jMenu2.add(jmiActualizarInventario);
 
         jMenuBar1.add(jMenu2);
-
-        jMenu3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/cliente.png"))); // NOI18N
-        jMenu3.setText("Cliente");
-        jMenu3.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
-        jMenu3.setPreferredSize(new java.awt.Dimension(150, 50));
-
-        jmiNuevoCliente.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jmiNuevoCliente.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/nuevo-cliente.png"))); // NOI18N
-        jmiNuevoCliente.setText("Nuevo Cliente");
-        jmiNuevoCliente.setPreferredSize(new java.awt.Dimension(180, 30));
-        jmiNuevoCliente.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jmiNuevoClienteActionPerformed(evt);
-            }
-        });
-        jMenu3.add(jmiNuevoCliente);
-
-        jmiGestionarCliente.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jmiGestionarCliente.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/cliente.png"))); // NOI18N
-        jmiGestionarCliente.setText("Gestionar Cliente");
-        jmiGestionarCliente.setPreferredSize(new java.awt.Dimension(180, 30));
-        jmiGestionarCliente.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jmiGestionarClienteActionPerformed(evt);
-            }
-        });
-        jMenu3.add(jmiGestionarCliente);
-
-        jMenuBar1.add(jMenu3);
 
         jMenu4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/categorias.png"))); // NOI18N
         jMenu4.setText("Categoria");
@@ -344,23 +312,11 @@ public class Menu extends javax.swing.JFrame {
         nuevoPr.setVisible(true);
     }//GEN-LAST:event_jmiNuevoProductoActionPerformed
 
-    private void jmiNuevoClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiNuevoClienteActionPerformed
-        NuevoCliente nuevoC = new NuevoCliente();
-        jDesktopPane_Menu.add(nuevoC);
-        nuevoC.setVisible(true);
-    }//GEN-LAST:event_jmiNuevoClienteActionPerformed
-
     private void jmiGestionarProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiGestionarProductoActionPerformed
         GestionarProducto GestProducto = new GestionarProducto();
         jDesktopPane_Menu.add(GestProducto);
         GestProducto.setVisible(true);
     }//GEN-LAST:event_jmiGestionarProductoActionPerformed
-
-    private void jmiGestionarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiGestionarClienteActionPerformed
-        GestionarCliente Gestcliente = new GestionarCliente();
-        jDesktopPane_Menu.add(Gestcliente);
-        Gestcliente.setVisible(true);
-    }//GEN-LAST:event_jmiGestionarClienteActionPerformed
 
     private void jmiActualizarInventarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiActualizarInventarioActionPerformed
         ActualizarStock Stock = new ActualizarStock();
@@ -403,7 +359,6 @@ public class Menu extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
-    private javax.swing.JMenu jMenu3;
     private javax.swing.JMenu jMenu4;
     private javax.swing.JMenu jMenu5;
     private javax.swing.JMenu jMenu6;
@@ -414,13 +369,11 @@ public class Menu extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem17;
     private javax.swing.JMenuItem jmiActualizarInventario;
     private javax.swing.JMenuItem jmiGestionarCategoria;
-    private javax.swing.JMenuItem jmiGestionarCliente;
     private javax.swing.JMenuItem jmiGestionarProducto;
     private javax.swing.JMenuItem jmiGestionarUsuario;
     private javax.swing.JMenuItem jmiGestionarVenta;
     private javax.swing.JMenuItem jmiNuevaCategoria;
     private javax.swing.JMenuItem jmiNuevaVenta;
-    private javax.swing.JMenuItem jmiNuevoCliente;
     private javax.swing.JMenuItem jmiNuevoProducto;
     private javax.swing.JMenuItem jmiNuevoUsuario;
     private javax.swing.JMenuItem jmiReportesCategorias;
