@@ -13,11 +13,9 @@ import com.itextpdf.text.Image;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
-
 import java.io.FileNotFoundException;
 import Conexiones.Conexion;
 import java.sql.PreparedStatement;
-
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.sql.SQLException;
@@ -31,72 +29,7 @@ import java.sql.ResultSet;
 
 
 public class ReportesController {
-    
-    
-    public void reporteClientes(){
-        Document documento = new Document();
-        try{
-            String ruta= System.getProperty("user.home");
-            PdfWriter.getInstance(documento, new FileOutputStream(ruta +"/Desktop/Reporte_Cliente.pdf"));
-            Image Header = Image.getInstance("src/img/header1.jpg");
-            Header.scaleToFit(650,1000);
-            Header.setAlignment(Chunk.ALIGN_CENTER);
-            
-            //formato all texto
-            Paragraph parrafo= new Paragraph();
-            parrafo.setAlignment(Paragraph.ALIGN_CENTER);
-            parrafo.add("Reporte creado por \n Poncho perez \n \n");
-            parrafo.setFont(FontFactory.getFont("Tahoma",18, Font.BOLD,BaseColor.DARK_GRAY));
-            
-            parrafo.add("Reporte de clientes \n \n");
-            
-            documento.open();
-            //agregamos los datos
-            
-            documento.add(Header);
-            documento.add(parrafo);
-            PdfPTable Tabla = new PdfPTable(5);
-            Tabla.addCell("Codigo");
-             Tabla.addCell("Nombre");
-              Tabla.addCell("Cedula");
-               Tabla.addCell("Telefono");
-                Tabla.addCell("Direccion");
-                
-                try{
-                    Connection cn = Conexion.conectar();
-                    PreparedStatement pst = cn.prepareStatement("select idCliente, concat(nombre,' ',apellido) as nombres, cedula, telefono, direccion from cliente;");
-                    
-                    ResultSet rs = pst.executeQuery();
-                    if(rs.next()){
-                        do{
-                       Tabla.addCell(rs.getString(1));
-                        Tabla.addCell(rs.getString(2));
-                         Tabla.addCell(rs.getString(3));
-                          Tabla.addCell(rs.getString(4));
-                           Tabla.addCell(rs.getString(5));
-                       
-                        }while(rs.next());
-                        documento.add(Tabla);
-                    }
-                }
-                catch(SQLException ex){
-                    System.out.println("Error en: "+ ex);
-                }
-            
-            documento.close();
-            JOptionPane.showMessageDialog(null, "Reporte creado");
-        }catch(DocumentException ex){
-            System.out.println("Error en: "+ ex);
-        } catch (FileNotFoundException ex) {
-             System.out.println("Error en: "+ ex);
-            //Logger.getLogger(ReportesController.class.getName()).log(Level.SEVERE, null, ex);
-        }  catch (IOException ex) {
-             System.out.println("Error en: "+ ex);
-            //Logger.getLogger(ReportesController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-       documento.close();
-    }
-    
+       
     public void reporteProductos(){
         Document documento = new Document();
         try{
@@ -252,31 +185,26 @@ public class ReportesController {
             
             documento.add(Header);
             documento.add(parrafo);
-            float[] columna= {3,9,4,5,3};
+            float[] columna= {3,4,5,3};
             
             PdfPTable Tabla = new PdfPTable(columna);
             Tabla.addCell("Codigo");
-             Tabla.addCell("cliente");
-              Tabla.addCell("total- pagar");
-               Tabla.addCell("fecha");
-                Tabla.addCell("estado");
-                 
-                
-                try{
-                    Connection cn = Conexion.conectar();
-                    PreparedStatement pst = cn.prepareStatement("select cv.idCabeceraVenta as id, concat(c.nombre,' ', c.apellido) as cliente, cv.valorpagar as total, cv.fechaventa as fecha, cv.estado from cabecera_venta as cv, cliente as c where cv.idcliente=c.idcliente;");
-                    
-                    ResultSet rs = pst.executeQuery();
-                    if(rs.next()){
-                        do{
-                       Tabla.addCell(rs.getString(1));
+            Tabla.addCell("total- pagar");
+            Tabla.addCell("fecha");
+            Tabla.addCell("estado");
+            
+            try{
+                Connection cn = Conexion.conectar();
+                PreparedStatement pst = cn.prepareStatement("select IdReporteVenta as id, valorPagar as total, fechaVenta as fecha, estado from Reporte_Venta;");
+                ResultSet rs = pst.executeQuery();
+                if(rs.next()){
+                    do{
+                        Tabla.addCell(rs.getString(1));
                         Tabla.addCell(rs.getString(2));
-                         Tabla.addCell(rs.getString(3));
-                          Tabla.addCell(rs.getString(4));
-                           Tabla.addCell(rs.getString(5));
-                           
-                       
-                        }while(rs.next());
+                        Tabla.addCell(rs.getString(3));
+                        Tabla.addCell(rs.getString(4));
+                        }
+                    while(rs.next());
                         documento.add(Tabla);
                     }
                 }
@@ -290,10 +218,8 @@ public class ReportesController {
             System.out.println("Error en: "+ ex);
         } catch (FileNotFoundException ex) {
              System.out.println("Error en: "+ ex);
-            //Logger.getLogger(ReportesController.class.getName()).log(Level.SEVERE, null, ex);
         }  catch (IOException ex) {
              System.out.println("Error en: "+ ex);
-            //Logger.getLogger(ReportesController.class.getName()).log(Level.SEVERE, null, ex);
         }
        documento.close();
     }

@@ -14,14 +14,12 @@ public class VentasDAO {
         Connection cn = Conexion.conectar();
         try {
             PreparedStatement consulta = cn.prepareStatement(
-                "INSERT INTO Reporte_Venta VALUES (?,?,?,?,?)",
-                Statement.RETURN_GENERATED_KEYS
+                    "INSERT INTO Reporte_Venta VALUES (?,?,?,?,?)",
+                    Statement.RETURN_GENERATED_KEYS
             );
-            consulta.setInt(1, 0); // ID autoincrement
-            consulta.setInt(2, obj.getIdCliente());
-            consulta.setDouble(3, obj.getValorPagar());
-            consulta.setString(4, obj.getFechaVenta());
-            consulta.setInt(5, obj.getEstado());
+            consulta.setDouble(2, obj.getValorPagar());
+            consulta.setString(3, obj.getFechaVenta());
+            consulta.setInt(4, obj.getEstado());
 
             if (consulta.executeUpdate() > 0) {
                 respuesta = true;
@@ -42,7 +40,7 @@ public class VentasDAO {
         Connection cn = Conexion.conectar();
         try {
             PreparedStatement consulta = cn.prepareStatement(
-                "INSERT INTO Detalle_Venta VALUES (?,?,?,?,?,?,?,?,?,?)"
+                    "INSERT INTO Detalle_Venta VALUES (?,?,?,?,?,?,?,?,?,?)"
             );
             consulta.setInt(1, 0);
             consulta.setInt(2, idReporteVentaRegistrada);
@@ -70,11 +68,10 @@ public class VentasDAO {
         Connection cn = Conexion.conectar();
         try {
             PreparedStatement consulta = cn.prepareStatement(
-                "UPDATE Reporte_Venta SET IdCliente=?, estado=? WHERE IdReporteVenta=?"
+                    "UPDATE Reporte_Venta SET estado=? WHERE IdReporteVenta=?"
             );
-            consulta.setInt(1, obj.getIdCliente());
-            consulta.setInt(2, obj.getEstado());
-            consulta.setInt(3, idReporteVenta);
+            consulta.setInt(1, obj.getEstado());
+            consulta.setInt(2, idReporteVenta);
 
             if (consulta.executeUpdate() > 0) {
                 respuesta = true;
@@ -85,24 +82,5 @@ public class VentasDAO {
         }
         return respuesta;
     }
-    
-    
-    public int obtenerIdClientePorNombre(String nombreCompleto) {
-    int id = -1;
-    Connection cn = Conexion.conectar();
-    try {
-        PreparedStatement pst = cn.prepareStatement(
-            "SELECT IdCliente FROM cliente WHERE CONCAT(nombre,' ',apellido) = ?");
-        pst.setString(1, nombreCompleto);
-        ResultSet rs = pst.executeQuery();
-        if (rs.next()) {
-            id = rs.getInt("IdCliente");
-        }
-        cn.close();
-    } catch (SQLException e) {
-        System.out.println("Error al obtener id del cliente: " + e.getMessage());
-    }
-    return id;
-}
 
 }

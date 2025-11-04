@@ -27,15 +27,5 @@ public class VentaController {
     }
     
     
-    public boolean actualizarVenta(String nombreCliente, String estadoTexto, int idVenta) {
-    VentasDAO dao = new VentasDAO();
-    int idCliente = dao.obtenerIdClientePorNombre(nombreCliente);
-    if (idCliente == -1) return false;
-
-    ReporteVenta reporte = new ReporteVenta();
-    reporte.setIdCliente(idCliente);
-    reporte.setEstado(estadoTexto.equalsIgnoreCase("Activo") ? 1 : 0);
-    return dao.actualizarReporteVenta(reporte, idVenta);
-}
 
 }

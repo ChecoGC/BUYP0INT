@@ -17,16 +17,12 @@ import javax.swing.JOptionPane;
 import javax.swing.JTable;
 
 public class GestionarVentas extends javax.swing.JInternalFrame {
-
-    private int idCliente = 0;
     private int idVenta;
 
     public GestionarVentas() {
         initComponents();
         this.setTitle("Gestionar Venta");
         this.CargarTablaVentas();
-        this.cargarClientes();
-
         // imagen 
         ImageIcon wallpaper = new ImageIcon("src/img/fondo3.jpg");
         Icon icono = new ImageIcon(wallpaper.getImage().getScaledInstance(900, 500, WIDTH));
@@ -48,12 +44,10 @@ public class GestionarVentas extends javax.swing.JInternalFrame {
         jPanel3 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         txtTotalPagar = new javax.swing.JTextField();
         txtFecha = new javax.swing.JTextField();
         cmbEstado = new javax.swing.JComboBox<>();
-        cmbCliente = new javax.swing.JComboBox<>();
         jLabelWallpaper = new javax.swing.JLabel();
 
         setClosable(true);
@@ -117,11 +111,6 @@ public class GestionarVentas extends javax.swing.JInternalFrame {
         jLabel3.setText("Fecha:");
         jPanel3.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 50, 50, -1));
 
-        jLabel4.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jLabel4.setText("Cliente:");
-        jPanel3.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 10, 90, -1));
-
         jLabel6.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         jLabel6.setText("Estado:");
@@ -137,14 +126,6 @@ public class GestionarVentas extends javax.swing.JInternalFrame {
         cmbEstado.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Activo", "Inactivo" }));
         jPanel3.add(cmbEstado, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 50, 155, -1));
 
-        cmbCliente.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccione cliente:", "Item 2", "Item 3", "Item 4" }));
-        cmbCliente.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cmbClienteActionPerformed(evt);
-            }
-        });
-        jPanel3.add(cmbCliente, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 10, 155, -1));
-
         getContentPane().add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 350, 800, 100));
         getContentPane().add(jLabelWallpaper, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 890, 460));
 
@@ -153,13 +134,13 @@ public class GestionarVentas extends javax.swing.JInternalFrame {
 int obtenerIdCategoriaCombo = 0;
 
     private void btnActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarActionPerformed
+    VentaController controlV = new VentaController();
+        String estado = cmbEstado.getSelectedItem().toString().trim();
 
-        VentaController controlV = new VentaController();
-    String cliente = cmbCliente.getSelectedItem().toString().trim();
-    String estado = cmbEstado.getSelectedItem().toString().trim();
-
-    if (!cliente.equalsIgnoreCase("")) {
-        if (controlV.actualizarVenta(cliente, estado, idVenta)) {
+        if (idVenta > 0) {
+            ReporteVenta reporte = new ReporteVenta();
+            reporte.setEstado(estado.equalsIgnoreCase("Activo") ? 1 : 0);
+            if (controlV.actualizarVenta(reporte, idVenta)) {
             JOptionPane.showMessageDialog(null, "Registro Actualizado");
             this.CargarTablaVentas();
             this.limpiar();
@@ -171,19 +152,13 @@ int obtenerIdCategoriaCombo = 0;
     }
     }//GEN-LAST:event_btnActualizarActionPerformed
 
-    private void cmbClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbClienteActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_cmbClienteActionPerformed
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnActualizar;
-    private javax.swing.JComboBox<String> cmbCliente;
     private javax.swing.JComboBox<String> cmbEstado;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabelWallpaper;
     private javax.swing.JPanel jPanel1;
@@ -196,15 +171,10 @@ int obtenerIdCategoriaCombo = 0;
     // End of variables declaration//GEN-END:variables
 
     private void CargarTablaVentas() {
-
         Connection con = Conexion.conectar();
         DefaultTableModel model = new DefaultTableModel();
-        String sql = "select rv.IdReporteVenta as id, concat(c.nombre, ' ',c.apellido) as cliente,"
-                + " rv.valorPagar as total, rv.fechaVenta as fecha, rv.estado "
-                + "from Reporte_Venta as rv, cliente as c "
-                + "where rv.IdCliente = c.IdCliente";
+        String sql = "SELECT IdReporteVenta, valorPagar, fechaVenta, estado FROM Reporte_Venta"; 
         Statement st;
-
         try {
             st = con.createStatement();
             ResultSet rs = st.executeQuery(sql);
@@ -212,16 +182,14 @@ int obtenerIdCategoriaCombo = 0;
             GestionarVentas.jScrollPane1.setViewportView(GestionarVentas.tbVentas);
 
             model.addColumn("Numero");
-            model.addColumn("Cliente");
             model.addColumn("Total Pagar");
             model.addColumn("Fecha Venta");
             model.addColumn("Estado");
 
             while (rs.next()) {
-
-                Object fila[] = new Object[5];
-                for (int i = 0; i < 5; i++) {
-                    if (i == 4) {
+                Object fila[] = new Object[4];
+                for (int i = 0; i < 4; i++) {
+                    if (i == 3) {
                         String estado = String.valueOf(rs.getObject(i + 1));
                         if (estado.equalsIgnoreCase("1")) {
                             fila[i] = "Activo";
@@ -238,7 +206,7 @@ int obtenerIdCategoriaCombo = 0;
             }
 
         } catch (SQLException ex) {
-            System.out.println("Error al llenar la tabla de ventas");
+            System.out.println("Error al llenar la tabla de ventas" + ex);
 
         }
 
@@ -261,13 +229,11 @@ int obtenerIdCategoriaCombo = 0;
     private void EnviarDatosVentaSeleccionada(int idVenta) {
         try {
             Connection con = Conexion.conectar();
-            PreparedStatement pst = con.prepareStatement("select rv.IdReporteVenta, rv.IdCLiente, "
-                    + "concat(c.nombre, ' ',c.apellido) as cliente, rv.valorPagar, rv.fechaVenta, rv.estado "
-                    + "from Reporte_Venta as rv, cliente as c where rv.IdReporteVenta = '" + idVenta + "' and rv.IdCliente = c.IdCliente;");
-
+            PreparedStatement pst = con.prepareStatement("SELECT IdReporteVenta, valorPagar, fechaVenta, estado "
+                + "FROM Reporte_Venta WHERE IdReporteVenta = ?");
+            pst.setInt(1, idVenta);
             ResultSet rs = pst.executeQuery();
             if (rs.next()) {
-                cmbCliente.setSelectedItem(rs.getString("cliente"));
                 txtTotalPagar.setText(rs.getString("valorPagar"));
                 txtFecha.setText(rs.getString("fechaVenta"));
                 int estado = rs.getInt("estado");
@@ -276,7 +242,6 @@ int obtenerIdCategoriaCombo = 0;
                 } else {
                     cmbEstado.setSelectedItem("Inactivo");
                 }
-
             }
             con.close();
         } catch (SQLException ex) {
@@ -304,32 +269,7 @@ int obtenerIdCategoriaCombo = 0;
     private void limpiar() {
         this.txtTotalPagar.setText("");
         this.txtFecha.setText("");
-        this.cmbCliente.setSelectedItem("Seleccione cliente:");
         this.cmbEstado.setSelectedItem("Activo");
-        idCliente = 0;
-    }
-
-    // Metodo para cargar clientes
-    private void cargarClientes() {
-        Connection cn = Conexion.conectar();
-        String sql = "select * from Cliente";
-        Statement st;
-        try {
-            st = cn.createStatement();
-            ResultSet rs = st.executeQuery(sql);
-
-            cmbCliente.removeAllItems();
-            cmbCliente.addItem("Seleccione cliente:");
-
-            while (rs.next()) {
-                cmbCliente.addItem(rs.getString("nombre") + " " + rs.getString("apellido"));
-            }
-            cn.close();
-        } catch (SQLException ex) {
-
-            System.out.println("Error al cargar clientes" + ex);
-        }
-
     }
 
 }

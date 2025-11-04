@@ -1,6 +1,5 @@
 package Vista;
 
-//import com.sun.jdi.connect.spi.Connection;
 import Conexiones.Conexion;
 import Controlador.VentaController;
 import Modelo.DetalleVenta;
@@ -8,7 +7,6 @@ import Modelo.ReporteVenta;
 import java.sql.PreparedStatement;
 import java.awt.Dimension;
 import java.awt.Image;
-//import java.beans.Statement;
 import java.sql.SQLException;
 import java.sql.Connection;
 import java.sql.Statement;
@@ -29,9 +27,6 @@ public class Venta extends javax.swing.JInternalFrame {
 
     ArrayList<DetalleVenta> listaProductos = new ArrayList<>();
     private DetalleVenta producto;
-
-    private int idCliente = 0;
-
     public String idProducto = "";
     public String nombre = "";
     public int cantidadProductoBBDD = 0;
@@ -136,14 +131,10 @@ public class Venta extends javax.swing.JInternalFrame {
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        jComboBox_Cliente = new javax.swing.JComboBox<>();
         JComboBox_Producto = new javax.swing.JComboBox<>();
-        txtBuscar_Cliente = new javax.swing.JTextField();
         txtCantidad = new javax.swing.JTextField();
-        btn_Buscar_Cliente = new javax.swing.JButton();
         btnAnadirProducto = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -163,8 +154,6 @@ public class Venta extends javax.swing.JInternalFrame {
         txt_Cambio = new javax.swing.JTextField();
         btn_Calcular = new javax.swing.JButton();
         btn_Regsitar_Venta = new javax.swing.JButton();
-        btn_Buscar_Cliente1 = new javax.swing.JButton();
-        txtBuscar_Cliente1 = new javax.swing.JTextField();
         btnBuscarProducto = new javax.swing.JButton();
         txtBuscarProducto = new javax.swing.JTextField();
         jlabel_imagen = new javax.swing.JLabel();
@@ -178,11 +167,6 @@ public class Venta extends javax.swing.JInternalFrame {
         jLabel1.setText("Venta");
         getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(392, 20, -1, -1));
 
-        jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel2.setText("Cliente:");
-        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 88, 55, -1));
-
         jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(255, 255, 255));
         jLabel3.setText("Cantidad:");
@@ -193,9 +177,6 @@ public class Venta extends javax.swing.JInternalFrame {
         jLabel4.setText("Producto:");
         getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 136, -1, -1));
 
-        jComboBox_Cliente.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccione cliente:", "Item 2", "Item 3", "Item 4" }));
-        getContentPane().add(jComboBox_Cliente, new org.netbeans.lib.awtextra.AbsoluteConstraints(111, 88, 155, -1));
-
         JComboBox_Producto.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccione producto:", "Item 2", "Item 3", "Item 4" }));
         JComboBox_Producto.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -203,17 +184,7 @@ public class Venta extends javax.swing.JInternalFrame {
             }
         });
         getContentPane().add(JComboBox_Producto, new org.netbeans.lib.awtextra.AbsoluteConstraints(109, 136, 155, -1));
-        getContentPane().add(txtBuscar_Cliente, new org.netbeans.lib.awtextra.AbsoluteConstraints(272, 88, 112, -1));
         getContentPane().add(txtCantidad, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 136, 70, -1));
-
-        btn_Buscar_Cliente.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        btn_Buscar_Cliente.setText("Buscar");
-        btn_Buscar_Cliente.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_Buscar_ClienteActionPerformed(evt);
-            }
-        });
-        getContentPane().add(btn_Buscar_Cliente, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 88, -1, -1));
 
         btnAnadirProducto.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         btnAnadirProducto.setText("Añadir Producto");
@@ -324,16 +295,6 @@ public class Venta extends javax.swing.JInternalFrame {
         });
         getContentPane().add(btn_Regsitar_Venta, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 370, 230, 100));
 
-        btn_Buscar_Cliente1.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        btn_Buscar_Cliente1.setText("Buscar");
-        btn_Buscar_Cliente1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_Buscar_Cliente1ActionPerformed(evt);
-            }
-        });
-        getContentPane().add(btn_Buscar_Cliente1, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 88, -1, -1));
-        getContentPane().add(txtBuscar_Cliente1, new org.netbeans.lib.awtextra.AbsoluteConstraints(272, 88, 112, -1));
-
         btnBuscarProducto.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         btnBuscarProducto.setText("Buscar");
         btnBuscarProducto.addActionListener(new java.awt.event.ActionListener() {
@@ -350,45 +311,9 @@ public class Venta extends javax.swing.JInternalFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btn_Buscar_ClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_Buscar_ClienteActionPerformed
-        String clientebuscar = txtBuscar_Cliente.getText().trim();
-        Connection cn = Conexion.conectar();
-        String sql = "SELECT nombre, apellido FROM cliente WHERE cedula = ?";  // Corregir la consulta SQL
-
-        try {
-            PreparedStatement pst = cn.prepareStatement(sql);
-            pst.setString(1, clientebuscar);  // Usar PreparedStatement para evitar inyección SQL
-
-            ResultSet rs = pst.executeQuery();
-
-            if (rs.next()) {
-                // Si se encuentra el cliente, se establece en el combo
-                jComboBox_Cliente.setSelectedItem(rs.getString("nombre") + " " + rs.getString("apellido"));
-            } else {
-                // Si no se encuentra el cliente, se muestra un mensaje y se reinicia el combo
-                jComboBox_Cliente.setSelectedItem("Seleccione cliente: ");
-                JOptionPane.showMessageDialog(null, "!Cédula de cliente incorrecta o no encontrada!");
-            }
-
-            // Limpiar el campo de búsqueda
-            txtBuscar_Cliente.setText("");
-
-            // Cerrar la conexión
-            cn.close();
-
-        } catch (SQLException ex) {
-            System.out.println("Error al buscar cliente: " + ex);
-        }
-
-    }//GEN-LAST:event_btn_Buscar_ClienteActionPerformed
-
     private void JComboBox_ProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JComboBox_ProductoActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_JComboBox_ProductoActionPerformed
-
-    private void btn_Buscar_Cliente1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_Buscar_Cliente1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btn_Buscar_Cliente1ActionPerformed
 
     private void btnBuscarProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarProductoActionPerformed
         String buscarPro = txtBuscarProducto.getText().trim();
@@ -649,14 +574,10 @@ public class Venta extends javax.swing.JInternalFrame {
     private javax.swing.JComboBox<String> JComboBox_Producto;
     private javax.swing.JButton btnAnadirProducto;
     private javax.swing.JButton btnBuscarProducto;
-    private javax.swing.JButton btn_Buscar_Cliente;
-    private javax.swing.JButton btn_Buscar_Cliente1;
     private javax.swing.JButton btn_Calcular;
     private javax.swing.JButton btn_Regsitar_Venta;
-    private javax.swing.JComboBox<String> jComboBox_Cliente;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -670,8 +591,6 @@ public class Venta extends javax.swing.JInternalFrame {
     public static javax.swing.JTable jTable_Productos;
     private javax.swing.JLabel jlabel_imagen;
     private javax.swing.JTextField txtBuscarProducto;
-    private javax.swing.JTextField txtBuscar_Cliente;
-    private javax.swing.JTextField txtBuscar_Cliente1;
     private javax.swing.JTextField txtCantidad;
     private javax.swing.JTextField txt_Cambio;
     private javax.swing.JTextField txt_Descuento;
@@ -680,29 +599,6 @@ public class Venta extends javax.swing.JInternalFrame {
     private javax.swing.JTextField txt_Subtotal;
     private javax.swing.JTextField txt_Toltal;
     // End of variables declaration//GEN-END:variables
-
-//Metodo para cargar clientes
-    private void cargarClientes() {
-        Connection cn = Conexion.conectar();
-        String sql = "select * from Cliente";
-        Statement st;
-        try {
-            st = cn.createStatement();
-            ResultSet rs = st.executeQuery(sql);
-
-            jComboBox_Cliente.removeAllItems();
-            jComboBox_Cliente.addItem("Seleccione cliente:");
-
-            while (rs.next()) {
-                jComboBox_Cliente.addItem(rs.getString("nombre") + " " + rs.getString("apellido"));
-            }
-            cn.close();
-        } catch (SQLException ex) {
-
-            System.out.println("Error al cargar clientes" + ex);
-        }
-
-    }
 
     //Metodo para cargar productos
     private void cargarProductos() {

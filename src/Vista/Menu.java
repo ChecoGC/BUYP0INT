@@ -41,7 +41,6 @@ public class Menu extends javax.swing.JFrame {
         jmiNuevaVenta = new javax.swing.JMenuItem();
         jmiGestionarVenta = new javax.swing.JMenuItem();
         jMenu6 = new javax.swing.JMenu();
-        jmiReportesClientes = new javax.swing.JMenuItem();
         jmiReportesCategorias = new javax.swing.JMenuItem();
         jmiReportesProductos = new javax.swing.JMenuItem();
         jmiReportesVentas = new javax.swing.JMenuItem();
@@ -184,17 +183,6 @@ public class Menu extends javax.swing.JFrame {
         jMenu6.setText("Reportes");
         jMenu6.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jMenu6.setPreferredSize(new java.awt.Dimension(150, 50));
-
-        jmiReportesClientes.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jmiReportesClientes.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/reporte1.png"))); // NOI18N
-        jmiReportesClientes.setText("Reportes Clientes");
-        jmiReportesClientes.setPreferredSize(new java.awt.Dimension(180, 30));
-        jmiReportesClientes.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jmiReportesClientesActionPerformed(evt);
-            }
-        });
-        jMenu6.add(jmiReportesClientes);
 
         jmiReportesCategorias.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jmiReportesCategorias.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/reporte1.png"))); // NOI18N
@@ -340,11 +328,6 @@ public class Menu extends javax.swing.JFrame {
         gestionVenta.setVisible(true);
     }//GEN-LAST:event_jmiGestionarVentaActionPerformed
 
-    private void jmiReportesClientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiReportesClientesActionPerformed
-       ReportesController reporte = new ReportesController();
-       reporte.reporteClientes();
-    }//GEN-LAST:event_jmiReportesClientesActionPerformed
-
     private void jmiReportesProductosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiReportesProductosActionPerformed
         ReportesController reporte = new ReportesController();
        reporte.reporteProductos();
@@ -377,7 +360,6 @@ public class Menu extends javax.swing.JFrame {
     private javax.swing.JMenuItem jmiNuevoProducto;
     private javax.swing.JMenuItem jmiNuevoUsuario;
     private javax.swing.JMenuItem jmiReportesCategorias;
-    private javax.swing.JMenuItem jmiReportesClientes;
     private javax.swing.JMenuItem jmiReportesProductos;
     private javax.swing.JMenuItem jmiReportesVentas;
     // End of variables declaration//GEN-END:variables
