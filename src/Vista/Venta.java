@@ -483,44 +483,44 @@ public class Venta extends javax.swing.JInternalFrame {
         String fechaActual = new SimpleDateFormat("yyyy/MM/dd").format(new Date());
 
         if (listaProductos.size() > 0) {
-            
-                ReporteVenta reporte = new ReporteVenta();
-                reporte.setIdIdReporteVenta(0);
-                reporte.setValorPagar(Double.parseDouble(txt_Toltal.getText()));
-                reporte.setFechaVenta(fechaActual);
-                reporte.setEstado(1);
 
-                // Convertir lista a arreglo
-                DetalleVenta[] detallesArray = listaProductos.toArray(new DetalleVenta[0]);
+            ReporteVenta reporte = new ReporteVenta();
+            reporte.setIdIdReporteVenta(0);
+            reporte.setValorPagar(Double.parseDouble(txt_Toltal.getText()));
+            reporte.setFechaVenta(fechaActual);
+            reporte.setEstado(1);
 
-                if (controlVenta.registrarVenta(reporte, detallesArray)) {
-                    JOptionPane.showMessageDialog(null, "Venta registrada con éxito");
+            // Convertir lista a arreglo
+            DetalleVenta[] detallesArray = listaProductos.toArray(new DetalleVenta[0]);
 
-                    // Limpiar campos y actualizar datos
-                    txt_Subtotal.setText("");
-                    txt_Descuento.setText("");
-                    txt_IVA.setText("");
-                    txt_Toltal.setText("");
-                    txt_Efectivo.setText("");
-                    txt_Cambio.setText("0.0");
-                    auxIdDetalle = 1;
-                    
-                    this.cargarProductos();
+            if (controlVenta.registrarVenta(reporte, detallesArray)) {
+                JOptionPane.showMessageDialog(null, "Venta registrada con éxito");
 
-                    // Restar stock
-                    for (DetalleVenta elemento : listaProductos) {
-                        this.restarStockProductos(elemento.getIdProducto(), elemento.getCantidad());
-                    }
+                // Limpiar campos y actualizar datos
+                txt_Subtotal.setText("");
+                txt_Descuento.setText("");
+                txt_IVA.setText("");
+                txt_Toltal.setText("");
+                txt_Efectivo.setText("");
+                txt_Cambio.setText("0.0");
+                auxIdDetalle = 1;
 
-                    listaProductos.clear();
-                    ListaTablaProductos();
-                } else {
-                    JOptionPane.showMessageDialog(null, "Error al registrar la venta");
+                this.cargarProductos();
+
+                // Restar stock
+                for (DetalleVenta elemento : listaProductos) {
+                    this.restarStockProductos(elemento.getIdProducto(), elemento.getCantidad());
                 }
 
+                listaProductos.clear();
+                ListaTablaProductos();
             } else {
-                JOptionPane.showMessageDialog(null, "Seleccione al menos un producto");
+                JOptionPane.showMessageDialog(null, "Error al registrar la venta");
             }
+
+        } else {
+            JOptionPane.showMessageDialog(null, "Seleccione al menos un producto");
+        }
 
     }//GEN-LAST:event_btn_Regsitar_VentaActionPerformed
 
