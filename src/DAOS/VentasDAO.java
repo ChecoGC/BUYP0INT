@@ -14,9 +14,10 @@ public class VentasDAO {
         Connection cn = Conexion.conectar();
         try {
             PreparedStatement consulta = cn.prepareStatement(
-                    "INSERT INTO Reporte_Venta VALUES (?,?,?,?,?)",
-                    Statement.RETURN_GENERATED_KEYS
+                "INSERT INTO Reporte_Venta (IdReporteVenta, valorPagar, fechaVenta, estado) VALUES (?,?,?,?)",
+                Statement.RETURN_GENERATED_KEYS
             );
+            consulta.setInt(1, 0);
             consulta.setDouble(2, obj.getValorPagar());
             consulta.setString(3, obj.getFechaVenta());
             consulta.setInt(4, obj.getEstado());

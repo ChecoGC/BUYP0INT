@@ -25,7 +25,6 @@ public class ReporteVenta {
         this.estado = estado;
     }
     
-    
     //Getters and Setters
     public int getIdIdReporteVenta() {
         return idReporteVenta;
