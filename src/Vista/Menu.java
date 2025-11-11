@@ -7,7 +7,7 @@ public class Menu extends javax.swing.JFrame {
 
     public static JDesktopPane jDesktopPane_Menu;
 
-    public Menu() {
+    public Menu(String rolUsuario) {
         initComponents();
         this.setExtendedState(this.MAXIMIZED_BOTH);
         this.setLocationRelativeTo(null);
@@ -20,6 +20,24 @@ public class Menu extends javax.swing.JFrame {
         int alto = java.awt.Toolkit.getDefaultToolkit().getScreenSize().height;
         this.jDesktopPane_Menu.setBounds(0, 0, ancho, (alto - 110));
         this.add(jDesktopPane_Menu);
+        
+        validarPermisos(rolUsuario);
+    }
+    
+    public Menu() {
+        // Al no saber el rol, se asume el mínimo permiso.
+        this("empleado"); 
+    }
+ 
+    
+    private void validarPermisos(String rol) {
+        if (!rol.equalsIgnoreCase("admin")) {
+            jmiNuevoUsuario.setEnabled(false); 
+            jmiGestionarUsuario.setEnabled(false); 
+        } else {
+            jmiNuevoUsuario.setEnabled(true); 
+            jmiGestionarUsuario.setEnabled(true);
+        }
     }
 
     @SuppressWarnings("unchecked")

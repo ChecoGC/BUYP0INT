@@ -20,8 +20,14 @@ public void iniciarSesion(String usuario, String password, javax.swing.JFrame lo
         user.setUsuario(usuario.trim());
         user.setPassword(password.trim());
         UsuarioDAO use = new UsuarioDAO();
-        if (use.loginUser(user)) {
-            Menu menu = new Menu();
+        
+        Usuario usuarioLogeado = use.loginAndGetUser(user); 
+        
+        if (usuarioLogeado != null) { // Si el login fue exitoso
+            
+            String rol = usuarioLogeado.getRol();
+            
+            Menu menu = new Menu(rol);
             menu.setVisible(true);
             loginFrame.dispose();
         } else {
@@ -31,7 +37,6 @@ public void iniciarSesion(String usuario, String password, javax.swing.JFrame lo
         JOptionPane.showMessageDialog(null, "Ingrese su usuario y contraseña");
     }
 }
-
 
 
  public boolean guardar(Usuario obj) {

@@ -10,27 +10,40 @@ import javax.swing.JOptionPane;
 
 public class UsuarioDAO {
       //Metodo para iniciar
-    public boolean loginUser(Usuario obj) {
-
-        boolean respuesta = false;
-
+    public Usuario loginAndGetUser(Usuario obj) {
+        
         Connection cn = Conexion.conectar();
-        String sql = "select usuario,password from usuario where usuario = '" + obj.getUsuario() + "' and password = '"
-                + obj.getPassword() + "'";
+        Usuario usuarioLogeado = null; 
+        String sql = "SELECT IdUsuario, nombre, apellido, usuario, "
+                + "password, telefono, estado, rol, hora_entrada, hora_salida "
+                   + "FROM usuario WHERE usuario = '" + obj.getUsuario() + 
+                "' AND password = '" + obj.getPassword() + "'";
+        
         Statement st;
         try {
-
             st = cn.createStatement();
             ResultSet rs = st.executeQuery(sql);
 
-            while (rs.next()) {
-                respuesta = true;
+            if (rs.next()) { 
+                usuarioLogeado = new Usuario();
+                
+                usuarioLogeado.setIdUsuario(rs.getInt("IdUsuario"));
+                usuarioLogeado.setNombre(rs.getString("nombre"));
+                usuarioLogeado.setApellido(rs.getString("apellido"));
+                usuarioLogeado.setUsuario(rs.getString("usuario"));
+                usuarioLogeado.setPassword(rs.getString("password"));
+                usuarioLogeado.setTelefono(rs.getString("telefono"));
+                usuarioLogeado.setEstado(rs.getInt("estado"));
+                usuarioLogeado.setRol(rs.getString("rol")); 
+            
             }
+            cn.close();
 
         } catch (SQLException e) {
-            System.out.println("Error al iniciar Sesion");
+            System.out.println("Error al iniciar Sesion: " + e.getMessage());
             JOptionPane.showMessageDialog(null, "Error al iniciar Sesion");
         }
-        return respuesta;
+        
+        return usuarioLogeado; 
     }
 }
