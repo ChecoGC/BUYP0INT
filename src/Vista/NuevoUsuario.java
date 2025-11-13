@@ -32,6 +32,12 @@ public class NuevoUsuario extends javax.swing.JInternalFrame {
         txtPassword = new javax.swing.JPasswordField();
         CheckboxVerClave = new javax.swing.JCheckBox();
         txtPasswordVisible = new javax.swing.JTextField();
+        jLabel7 = new javax.swing.JLabel();
+        cmbRol = new javax.swing.JComboBox<>();
+        txtHoraEntrada = new javax.swing.JTextField();
+        txtHoraSalida = new javax.swing.JTextField();
+        jLabel8 = new javax.swing.JLabel();
+        jLabel9 = new javax.swing.JLabel();
         lblFondo = new javax.swing.JLabel();
 
         setClosable(true);
@@ -70,8 +76,8 @@ public class NuevoUsuario extends javax.swing.JInternalFrame {
         jLabel6.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(255, 255, 255));
         jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        jLabel6.setText("Telefono:");
-        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 170, 100, -1));
+        jLabel6.setText("Hora Salida:");
+        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 260, 130, -1));
 
         txtNombre.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         getContentPane().add(txtNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 50, 170, -1));
@@ -98,7 +104,7 @@ public class NuevoUsuario extends javax.swing.JInternalFrame {
                 btnGuardarActionPerformed(evt);
             }
         });
-        getContentPane().add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 230, 90, 30));
+        getContentPane().add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 300, 90, 30));
         getContentPane().add(txtPassword, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 140, 170, -1));
 
         CheckboxVerClave.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -111,42 +117,79 @@ public class NuevoUsuario extends javax.swing.JInternalFrame {
         txtPasswordVisible.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         getContentPane().add(txtPasswordVisible, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 140, 170, -1));
 
+        jLabel7.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel7.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel7.setText("Rol:");
+        getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 190, 70, 30));
+
+        cmbRol.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "empleado", "admin" }));
+        cmbRol.setPreferredSize(new java.awt.Dimension(64, 21));
+        cmbRol.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbRolActionPerformed(evt);
+            }
+        });
+        getContentPane().add(cmbRol, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 200, 170, -1));
+
+        txtHoraEntrada.setText("HH:MM:SS");
+        getContentPane().add(txtHoraEntrada, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 230, 170, -1));
+
+        txtHoraSalida.setText("HH:MM:SS");
+        getContentPane().add(txtHoraSalida, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 260, 170, -1));
+
+        jLabel8.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel8.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel8.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jLabel8.setText("Telefono:");
+        getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 170, 100, -1));
+
+        jLabel9.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel9.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel9.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jLabel9.setText("Hora Entrada:");
+        getContentPane().add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 230, 130, -1));
+
         lblFondo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/fondo3.jpg"))); // NOI18N
-        getContentPane().add(lblFondo, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 390, 270));
+        getContentPane().add(lblFondo, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 410, 360));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
-        if (txtNombre.getText().isEmpty() || txtApellido.getText().isEmpty() || txtUsuario.getText().isEmpty()
-                || txtPassword.getText().isEmpty() || txtTelefono.getText().isEmpty()) {
+        // Validaciones existentes (nombre, apellido, usuario, password, etc.)
+    if (txtNombre.getText().isEmpty() || txtApellido.getText().isEmpty() || 
+        txtUsuario.getText().isEmpty() || txtPassword.getText().isEmpty() || 
+        txtTelefono.getText().isEmpty() || cmbRol.getSelectedItem().toString().equals("Seleccione rol:") ) { // <-- Agregada validación de rol
+        
+        JOptionPane.showMessageDialog(null, "Completa todos los campos");
+    } else {
+        
+        // 1. Crear el objeto Usuario y asignar campos existentes
+        Usuario usuario = new Usuario();
+        LoginController controlUsuario = new LoginController(); // Asumiendo que usas LoginController para guardar
 
-            JOptionPane.showMessageDialog(null, "Completa todos los campos");
+        usuario.setNombre(txtNombre.getText().trim());
+        usuario.setApellido(txtApellido.getText().trim());
+        usuario.setUsuario(txtUsuario.getText().trim());
+        usuario.setPassword(txtPassword.getText().trim());
+        usuario.setTelefono(txtTelefono.getText().trim());
+        usuario.setEstado(1);
+        
+        // 2. ASIGNAR LOS NUEVOS CAMPOS
+        usuario.setRol(cmbRol.getSelectedItem().toString()); 
+        // Nota: Los campos de hora pueden ser NULL si se dejan vacíos. Si el campo en BD es NOT NULL, debes validar aquí.
+        // Asignaremos NULL si están vacíos, ya que la columna hora_entrada/salida permite NULL en tu SQL.
+        usuario.setHora_entrada(txtHoraEntrada.getText().trim().isEmpty() ? null : txtHoraEntrada.getText().trim());
+        usuario.setHora_salida(txtHoraSalida.getText().trim().isEmpty() ? null : txtHoraSalida.getText().trim());
 
+        // 3. Guardar
+        if (controlUsuario.guardar(usuario)) {
+            JOptionPane.showMessageDialog(null, "¡Usuario registrado con éxito!");
+            this.limpiar();
         } else {
-            //validar si el ususario ya esta registrado
-            Usuario usuario = new Usuario();
-            LoginController controlUsuario = new LoginController();
-            if (!controlUsuario.UsuarioRepetido(txtUsuario.getText().trim())) {
-
-                usuario.setNombre(txtNombre.getText().trim());
-                usuario.setApellido(txtApellido.getText().trim());
-                usuario.setUsuario(txtUsuario.getText().trim());
-                usuario.setPassword(txtPassword.getText().trim());
-                usuario.setTelefono(txtTelefono.getText().trim());
-                usuario.setEstado(1);
-
-                if (controlUsuario.guardar(usuario)) {
-                    JOptionPane.showMessageDialog(null, "Usuario registrado.");
-
-                } else {
-                    JOptionPane.showMessageDialog(null, "Error al registrar usuario.");
-                }
-            } else {
-                JOptionPane.showMessageDialog(null, "El usuario ya esta registrado.");
-            }
-
+            JOptionPane.showMessageDialog(null, "Error al guardar usuario");
         }
+    }
         this.limpiar();
     }//GEN-LAST:event_btnGuardarActionPerformed
 
@@ -175,18 +218,28 @@ public class NuevoUsuario extends javax.swing.JInternalFrame {
         
     }//GEN-LAST:event_CheckboxVerClaveMouseClicked
 
+    private void cmbRolActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbRolActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cmbRolActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JCheckBox CheckboxVerClave;
     private javax.swing.JButton btnGuardar;
+    private javax.swing.JComboBox<String> cmbRol;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JLabel lblFondo;
     private javax.swing.JTextField txtApellido;
+    private javax.swing.JTextField txtHoraEntrada;
+    private javax.swing.JTextField txtHoraSalida;
     private javax.swing.JTextField txtNombre;
     private javax.swing.JPasswordField txtPassword;
     private javax.swing.JTextField txtPasswordVisible;
@@ -200,6 +253,9 @@ public class NuevoUsuario extends javax.swing.JInternalFrame {
         txtUsuario.setText("");
         txtPassword.setText("");
         txtTelefono.setText("");
+        txtHoraEntrada.setText("");
+        txtHoraSalida.setText("");
+        cmbRol.setSelectedIndex(0);
     }
 
 }

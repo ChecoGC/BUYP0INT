@@ -179,7 +179,7 @@ int obtenerIdCategoriaCombo = 0;
                 usuario.setTelefono(txtTelefono.getText().trim());
                 usuario.setEstado(1);
 
-                if (controlUsuario.actuCliente(usuario, idUsuario)) {
+                if (controlUsuario.actualizarUsuario(usuario, idUsuario)) {
                     JOptionPane.showMessageDialog(null, "¡Se actulizo correctamente!");
                     this.limpiar();
                     this.CargarTablaUsuarios();

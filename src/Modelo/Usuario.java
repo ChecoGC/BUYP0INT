@@ -11,6 +11,8 @@ public class Usuario {
     private String telefono;
     private int estado;
     private String rol;
+    private String hora_entrada;
+    private String hora_salida;
 
     //Constructor
     public Usuario() {
@@ -22,6 +24,8 @@ public class Usuario {
         this.telefono = "";
         this.estado = 0;
         this.rol = "";
+        this.hora_entrada = null;
+        this.hora_salida = null;
     }
 
     //Setters y Getters
@@ -87,5 +91,21 @@ public class Usuario {
 
     public void setRol(String rol) {
         this.rol = rol;
+    }
+    
+    public String getHora_entrada() {
+        return hora_entrada;
+    }
+
+    public void setHora_entrada(String hora_entrada) {
+        this.hora_entrada = hora_entrada;
+    }
+
+    public String getHora_salida() {
+        return hora_salida;
+    }
+
+    public void setHora_salida(String hora_salida) {
+        this.hora_salida = hora_salida;
     }
 }

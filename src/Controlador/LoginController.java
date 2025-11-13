@@ -39,35 +39,49 @@ public void iniciarSesion(String usuario, String password, javax.swing.JFrame lo
 }
 
 
- public boolean guardar(Usuario obj) {
-        boolean respuesta = false;
-        Connection cn = Conexion.conectar();;
-        PreparedStatement consulta = null;
+public boolean guardar(Usuario obj) {
+    boolean respuesta = false;
+    Connection cn = Conexion.conectar();;
+    PreparedStatement consulta = null;
 
-        try {
-            consulta = cn.prepareStatement("INSERT INTO usuario (nombre, apellido, usuario, password, "
-                    + "telefono, estado) VALUES (?, ?, ?, ?, ?, ?)");
-
-            consulta.setString(1, obj.getNombre());
-            consulta.setString(2, obj.getApellido());
-            consulta.setString(3, obj.getUsuario());
-            consulta.setString(4, obj.getPassword());
-            consulta.setString(5, obj.getTelefono());
-            consulta.setInt(6, obj.getEstado());
-
-            if (consulta.executeUpdate() > 0) {
-                respuesta = true;
-            }
-
-            cn.close();
-
-        } catch (SQLException e) {
-            System.out.println("Error al guardar usuario: " + e.getMessage());
+    try {
+        consulta = cn.prepareStatement("INSERT INTO usuario (nombre, apellido, usuario, password, "
+                + "telefono, estado, rol, hora_entrada, hora_salida) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        
+        consulta.setString(1, obj.getNombre());
+        consulta.setString(2, obj.getApellido());
+        consulta.setString(3, obj.getUsuario());
+        consulta.setString(4, obj.getPassword());
+        consulta.setString(5, obj.getTelefono());
+        consulta.setInt(6, obj.getEstado());
+        consulta.setString(7, obj.getRol());
+        
+        // Manejar valores nulos para los campos TIME
+        if (obj.getHora_entrada() == null || obj.getHora_entrada().isEmpty()) {
+            consulta.setNull(8, java.sql.Types.TIME);
+        } else {
+            consulta.setString(8, obj.getHora_entrada());
         }
 
-        return respuesta;
+        if (obj.getHora_salida() == null || obj.getHora_salida().isEmpty()) {
+            consulta.setNull(9, java.sql.Types.TIME);
+        } else {
+            consulta.setString(9, obj.getHora_salida());
+        }
+
+
+        if (consulta.executeUpdate() > 0) {
+            respuesta = true;
+        }
+
+        cn.close();
+
+    } catch (SQLException e) {
+        System.out.println("Error al guardar usuario: " + e.getMessage());
     }
 
+    return respuesta;
+}
     // Metodo para ver ya existe una cateegoria
     public boolean UsuarioRepetido(String usuario) {
         boolean respuesta = false;
@@ -89,29 +103,45 @@ public void iniciarSesion(String usuario, String password, javax.swing.JFrame lo
     }
 
     
-    public boolean actuCliente(Usuario obj, int idUsuario) {
-        boolean respuesta = false;
-        Connection cn = Conexion.conectar();
-        try {
-            PreparedStatement consulta = cn.prepareStatement("update usuario set nombre=?,apellido=?, usuario=?, password=?, telefono=?, estado=? where IdUsuario='" + idUsuario + "'");
-            consulta.setString(1, obj.getNombre());
-            consulta.setString(2, obj.getApellido());
-            consulta.setString(3, obj.getUsuario());
-            consulta.setString(4, obj.getPassword());
-            consulta.setString(5, obj.getTelefono());
-            consulta.setInt(6, obj.getEstado());
+    public boolean actualizarUsuario(Usuario obj, int idUsuario) {
+    boolean respuesta = false;
+    Connection cn = Conexion.conectar();
+    try {
+        PreparedStatement consulta = cn.prepareStatement("UPDATE usuario SET nombre=?, apellido=?, usuario=?, "
+                + "password=?, telefono=?, estado=?, rol=?, hora_entrada=?, hora_salida=? WHERE IdUsuario='" + idUsuario + "'");
+        
+        consulta.setString(1, obj.getNombre());
+        consulta.setString(2, obj.getApellido());
+        consulta.setString(3, obj.getUsuario());
+        consulta.setString(4, obj.getPassword());
+        consulta.setString(5, obj.getTelefono());
+        consulta.setInt(6, obj.getEstado());
 
-            if (consulta.executeUpdate() > 0) {
-                respuesta = true;
-
-            }
-            cn.close();
-
-        } catch (SQLException ex) {
-            System.out.println("Error al actualizar usuario" + ex);
+        // Parámetros 7-9 (NUEVOS)
+        consulta.setString(7, obj.getRol());
+        
+        if (obj.getHora_entrada() == null || obj.getHora_entrada().isEmpty()) {
+            consulta.setNull(8, java.sql.Types.TIME);
+        } else {
+            consulta.setString(8, obj.getHora_entrada());
         }
-        return respuesta;
+
+        if (obj.getHora_salida() == null || obj.getHora_salida().isEmpty()) {
+            consulta.setNull(9, java.sql.Types.TIME);
+        } else {
+            consulta.setString(9, obj.getHora_salida());
+        }
+
+        if (consulta.executeUpdate() > 0) {
+            respuesta = true;
+        }
+        cn.close();
+
+    } catch (SQLException ex) {
+        System.out.println("Error al actualizar usuario" + ex);
     }
+    return respuesta;
+}
 
     public boolean elimCliente(int idUsuario) {
         boolean respuesta = false;
