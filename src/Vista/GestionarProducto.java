@@ -186,84 +186,110 @@ public class GestionarProducto extends javax.swing.JInternalFrame {
 int obtenerIdCategoriaCombo = 0;
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
 
-        Producto producto = new Producto();
-        ProductoController controlPro = new ProductoController();
-        String iva = "";
-        String categoria = "";
-        iva = cmbIVA.getSelectedItem().toString().trim();
-        categoria = cmbCategoria.getSelectedItem().toString().trim();
+       Producto producto = new Producto();
+ProductoController controlPro = new ProductoController();
+String iva = "";
+String categoria = "";
+iva = cmbIVA.getSelectedItem().toString().trim();
+categoria = cmbCategoria.getSelectedItem().toString().trim();
 
-        // Validar los campor
-        if (txtNombre.getText().isEmpty() || txtCantidad.getText().isEmpty()
-                || txtPrecio.getText().isEmpty()) {
-            JOptionPane.showMessageDialog(null, "Completa todos los campos");
+// Validar los campos
+if (txtNombre.getText().isEmpty() || txtCantidad.getText().isEmpty()
+        || txtPrecio.getText().isEmpty() || txtDescripcion.getText().isEmpty()) {
+    JOptionPane.showMessageDialog(null, "Completa todos los campos");
+} else {
 
+    if (iva.equalsIgnoreCase("Seleccione IVA:")) {
+        JOptionPane.showMessageDialog(null, "Seleccione el IVA");
+    } else {
+        if (categoria.equalsIgnoreCase("Seleccione Categoria")) {
+            JOptionPane.showMessageDialog(null, "Seleccione una categoria");
         } else {
+            try {
 
-            if (iva.equalsIgnoreCase("Seleccione IVA:")) {
-                JOptionPane.showMessageDialog(null, "Seleccione el IVA");
-            } else {
-                if (categoria.equalsIgnoreCase("Seleccione Categoria")) {
-                    JOptionPane.showMessageDialog(null, "Seleccione una categoria");
-                } else {
-                    try {
-                        
-                        producto.setNombre(txtNombre.getText());
-                        producto.setCantidad(Integer.parseInt(txtCantidad.getText()));
-                        String precioTXT = "";
-                        double Precio = 0.0;
-                        precioTXT = txtPrecio.getText().trim();
-                        boolean aux = false;
-                        // Si el usuario ingresa , (coma) com punto decimal, lo transformamos a punto
-
-                        for (int i = 0; i < precioTXT.length(); i++) {
-                            if (precioTXT.charAt(i) == ',') {
-                                String precioNuevo = precioTXT.replace(",", ".");
-                                Precio = Double.parseDouble(precioNuevo);
-                                aux = true;
-                            }
-                        }
-
-                        //Evaluar la condicion
-                        if (aux == true) {
-                            producto.setPrecio(Precio);
-                        } else {
-                            Precio = Double.parseDouble(precioTXT);
-                            producto.setPrecio(Precio);
-                        }
-
-                        producto.setDescripcion(txtDescripcion.getText().trim());
-                        // Porcentaje IVA
-                        if (iva.equalsIgnoreCase("Sin IVA")) {
-                            producto.setPorcentajeIVA(0);
-                        } else if (iva.equalsIgnoreCase("16%")) {
-                            producto.setPorcentajeIVA(16);
-                        }
-
-                        // idCategoria -- Cargar metodo para obtener el id
-                        this.obtnerIdCategoria();
-                        producto.setIdCategoria(obtenerIdCategoriaCombo);
-                        producto.setEstado(1);
-
-                        if (controlPro.actuProducto(producto, idProducto)) {
-                            JOptionPane.showMessageDialog(null, "Producto Actualizado");
-                            this.CargarComboCategorias();
-                            this.CargarTablaProductos();
-                            this.cmbIVA.setSelectedItem("Seleccione IVA:");
-                            this.cmbCategoria.setSelectedItem("Seleccione Categoria");
-                            this.limpiar();
-                        } else {
-                            JOptionPane.showMessageDialog(null, "Error al actualizar");
-                        }
-
-                    } catch (HeadlessException | NumberFormatException e) {
-                        System.out.println("Error en: " + e);
-                    }
-
+                // 🔹 Validación: nombre sin números ni caracteres especiales
+                String nombre = txtNombre.getText().trim();
+                if (!nombre.matches("^[a-zA-ZÁÉÍÓÚáéíóúÑñ\\s]+$")) {
+                    JOptionPane.showMessageDialog(null, "El nombre solo puede contener letras y espacios");
+                    return;
                 }
+
+                // 🔹 Validación: cantidad solo números y mayor que 0
+                int cantidad;
+                try {
+                    cantidad = Integer.parseInt(txtCantidad.getText().trim());
+                    if (cantidad <= 0) {
+                        JOptionPane.showMessageDialog(null, "La cantidad debe ser mayor que 0");
+                        return;
+                    }
+                } catch (NumberFormatException e) {
+                    JOptionPane.showMessageDialog(null, "La cantidad solo puede contener números enteros");
+                    return;
+                }
+
+                // 🔹 Validación: precio solo números (permite punto decimal)
+                String precioTXT = txtPrecio.getText().trim().replace(",", ".");
+                double Precio = 0.0;
+                boolean aux = false;
+
+                try {
+                    Precio = Double.parseDouble(precioTXT);
+                    if (Precio <= 0) {
+                        JOptionPane.showMessageDialog(null, "El precio debe ser mayor que 0");
+                        return;
+                    }
+                } catch (NumberFormatException e) {
+                    JOptionPane.showMessageDialog(null, "El precio solo puede contener números (use punto para decimales)");
+                    return;
+                }
+
+                // 🔹 Validación: descripción con máximo 100 palabras
+                String descripcion = txtDescripcion.getText().trim();
+                int palabras = descripcion.split("\\s+").length;
+                if (palabras > 100) {
+                    JOptionPane.showMessageDialog(null, "La descripción no puede tener más de 100 palabras (actualmente tiene " + palabras + ")");
+                    return;
+                }
+
+                // 🔹 Asignación después de validar
+                producto.setNombre(nombre);
+                producto.setCantidad(cantidad);
+                producto.setPrecio(Precio);
+                producto.setDescripcion(descripcion);
+
+                // Porcentaje IVA
+                if (iva.equalsIgnoreCase("Sin IVA")) {
+                    producto.setPorcentajeIVA(0);
+                } else if (iva.equalsIgnoreCase("16%")) {
+                    producto.setPorcentajeIVA(16);
+                }
+
+                // idCategoria -- Cargar metodo para obtener el id
+                this.obtnerIdCategoria();
+                producto.setIdCategoria(obtenerIdCategoriaCombo);
+                producto.setEstado(1);
+
+                if (controlPro.actuProducto(producto, idProducto)) {
+                    JOptionPane.showMessageDialog(null, "Producto Actualizado");
+                    this.CargarComboCategorias();
+                    this.CargarTablaProductos();
+                    this.cmbIVA.setSelectedItem("Seleccione IVA:");
+                    this.cmbCategoria.setSelectedItem("Seleccione Categoria");
+                    this.limpiar();
+                } else {
+                    JOptionPane.showMessageDialog(null, "Error al actualizar");
+                }
+
+            } catch (HeadlessException | NumberFormatException e) {
+                System.out.println("Error en: " + e);
             }
 
         }
+    }
+
+}
+
+
 
     }//GEN-LAST:event_btnEditarActionPerformed
     private int obtnerIdCategoria() {
@@ -288,8 +314,8 @@ int obtenerIdCategoriaCombo = 0;
         if (idProducto == null || idProducto.trim().isEmpty()) {
             JOptionPane.showMessageDialog(null, "Seleccione un producto");
         } else {
-        if (controlprod.elimProd(idProducto)) {
-        JOptionPane.showMessageDialog(null, "Producto eliminado");
+            if (controlprod.elimProd(idProducto)) {
+                JOptionPane.showMessageDialog(null, "Producto eliminado");
 
                 this.CargarComboCategorias();
                 this.CargarTablaProductos();

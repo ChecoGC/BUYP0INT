@@ -12,7 +12,7 @@ public class Conexion {
         Connection cn = DriverManager.getConnection(
             "jdbc:mysql://localhost/sistema_ventas?useSSL=false&allowPublicKeyRetrieval=true",
             "root",//Usuario de MySQL
-            "guzman86" // Tu contraseña 
+            "itsuki5584h" // Tu contraseña 
         );
         return cn;
     } catch (SQLException e) {

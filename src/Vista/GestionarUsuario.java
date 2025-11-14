@@ -172,11 +172,41 @@ int obtenerIdCategoriaCombo = 0;
                     || txtUsuario.getText().isEmpty() || txtPassword.getText().isEmpty() || txtTelefono.getText().isEmpty()) {
                 JOptionPane.showMessageDialog(null, "¡Completa todos los campos!");
             } else {
-                usuario.setNombre(txtNombre.getText().trim());
-                usuario.setApellido(txtApellido.getText().trim());
+
+                // 🔹 Validar nombre solo letras
+                String nombre = txtNombre.getText().trim();
+                if (!nombre.matches("^[a-zA-ZÁÉÍÓÚáéíóúÑñ\\s]+$")) {
+                    JOptionPane.showMessageDialog(null, "El nombre solo puede contener letras y espacios");
+                    return;
+                }
+
+                // 🔹 Validar apellido solo letras
+                String apellido = txtApellido.getText().trim();
+                if (!apellido.matches("^[a-zA-ZÁÉÍÓÚáéíóúÑñ\\s]+$")) {
+                    JOptionPane.showMessageDialog(null, "El apellido solo puede contener letras y espacios");
+                    return;
+                }
+
+                // 🔹 Validar contraseña mínimo 8 caracteres
+                String password = txtPassword.getText().trim();
+                if (password.length() < 8) {
+                    JOptionPane.showMessageDialog(null, "La contraseña debe tener al menos 8 caracteres");
+                    return;
+                }
+
+                // 🔹 Validar teléfono: solo números y 10 dígitos
+                String telefono = txtTelefono.getText().trim();
+                if (!telefono.matches("\\d{10}")) {
+                    JOptionPane.showMessageDialog(null, "El teléfono debe contener solo números y tener 10 dígitos");
+                    return;
+                }
+
+                // 🔹 Asignación de valores después de validar
+                usuario.setNombre(nombre);
+                usuario.setApellido(apellido);
                 usuario.setUsuario(txtUsuario.getText().trim());
-                usuario.setPassword(txtPassword.getText().trim());
-                usuario.setTelefono(txtTelefono.getText().trim());
+                usuario.setPassword(password);
+                usuario.setTelefono(telefono);
                 usuario.setEstado(1);
 
                 if (controlUsuario.actualizarUsuario(usuario, idUsuario)) {
@@ -190,6 +220,7 @@ int obtenerIdCategoriaCombo = 0;
                 }
             }
         }
+
     }//GEN-LAST:event_btnEditarActionPerformed
 
     /*private int obtnerIdCategoria() {

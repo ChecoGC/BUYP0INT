@@ -156,7 +156,7 @@ public class NuevoProducto extends javax.swing.JInternalFrame {
         iva = cmbIVA.getSelectedItem().toString().trim();
         categoria = cmbCategoria.getSelectedItem().toString().trim();
 
-        // Validar los campor
+        // Validar los campos
         if (txtNombre.getText().equals("") || txtCantidad.getText().equals("")
                 || txtPrecio.getText().equals("")) {
             JOptionPane.showMessageDialog(null, "Completa todos los campos");
@@ -164,6 +164,44 @@ public class NuevoProducto extends javax.swing.JInternalFrame {
             txtCantidad.setBackground(Color.red);
             txtPrecio.setBackground(Color.red);
         } else {
+
+            // 🔹 Validación: el nombre solo puede tener letras y espacios
+            if (!txtNombre.getText().matches("^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+$")) {
+                JOptionPane.showMessageDialog(null, "El nombre solo puede contener letras y espacios");
+                txtNombre.setBackground(Color.red);
+                return;
+            } else {
+                txtNombre.setBackground(Color.white);
+            }
+
+            // 🔹 Validación: cantidad solo números enteros
+            if (!txtCantidad.getText().matches("^[0-9]+$")) {
+                JOptionPane.showMessageDialog(null, "La cantidad solo puede contener números enteros");
+                txtCantidad.setBackground(Color.red);
+                return;
+            } else {
+                txtCantidad.setBackground(Color.white);
+            }
+
+            // 🔹 Validación: precio solo números y punto decimal
+            if (!txtPrecio.getText().matches("^[0-9]+(\\.[0-9]+)?$")) {
+                JOptionPane.showMessageDialog(null, "El precio debe ser un número válido (usa punto para decimales)");
+                txtPrecio.setBackground(Color.red);
+                return;
+            } else {
+                txtPrecio.setBackground(Color.white);
+            }
+
+            // 🔹 Validación: descripción máximo 100 palabras
+            String[] palabras = txtDescripcion.getText().trim().split("\\s+");
+            if (palabras.length > 100) {
+                JOptionPane.showMessageDialog(null, "La descripción no puede tener más de 100 palabras");
+                txtDescripcion.setBackground(Color.red);
+                return;
+            } else {
+                txtDescripcion.setBackground(Color.white);
+            }
+
             // Consulta para verificar producto repetido
             if (!controlPro.productoRepetido(txtIdProducto.getText().trim())) {
                 if (iva.equalsIgnoreCase("Seleccione IVA:")) {
@@ -172,7 +210,7 @@ public class NuevoProducto extends javax.swing.JInternalFrame {
                     if (categoria.equalsIgnoreCase("Seleccione Categoria")) {
                         JOptionPane.showMessageDialog(null, "Seleccione una categoria");
                     } else {
-                        try{
+                        try {
                             producto.setIdProducto(txtIdProducto.getText().trim());
                             producto.setNombre(txtNombre.getText());
                             producto.setCantidad(Integer.parseInt(txtCantidad.getText()));
@@ -180,57 +218,54 @@ public class NuevoProducto extends javax.swing.JInternalFrame {
                             double Precio = 0.0;
                             precioTXT = txtPrecio.getText().trim();
                             boolean aux = false;
-                            // Si el usuario ingresa , (coma) com punto decimal, lo transformamos a punto
-                            
-                            for(int i=0; i< precioTXT.length(); i++){
-                                if(precioTXT.charAt(i) == ','){
+                            // Si el usuario ingresa , (coma) como punto decimal, lo transformamos a punto
+
+                            for (int i = 0; i < precioTXT.length(); i++) {
+                                if (precioTXT.charAt(i) == ',') {
                                     String precioNuevo = precioTXT.replace(",", ".");
                                     Precio = Double.parseDouble(precioNuevo);
-                                    aux=true;
+                                    aux = true;
                                 }
                             }
-                            
-                            //Evaluar la condicion
-                            if(aux == true){
+
+                            // Evaluar la condición
+                            if (aux == true) {
                                 producto.setPrecio(Precio);
-                            }else{
+                            } else {
                                 Precio = Double.parseDouble(precioTXT);
                                 producto.setPrecio(Precio);
                             }
-                            
+
                             producto.setDescripcion(txtDescripcion.getText().trim());
                             // Porcentaje IVA
-                            if(iva.equalsIgnoreCase("Sin IVA")){
+                            if (iva.equalsIgnoreCase("Sin IVA")) {
                                 producto.setPorcentajeIVA(0);
-                            }else if(iva.equalsIgnoreCase("16%")){
+                            } else if (iva.equalsIgnoreCase("16%")) {
                                 producto.setPorcentajeIVA(16);
                             }
-                            
-                            
+
                             // idCategoria -- Cargar metodo para obtener el id
                             this.obtnerIdCategoria();
                             producto.setIdCategoria(obtenerIdCategoriaCombo);
                             producto.setEstado(1);
-                            
-                            
-                            if(controlPro.guardar(producto)){
+
+                            if (controlPro.guardar(producto)) {
                                 JOptionPane.showMessageDialog(null, "Producto Guardado");
-                                 txtNombre.setBackground(Color.white);
-                                 txtCantidad.setBackground(Color.white);
-                                 txtPrecio.setBackground(Color.white);
-                                 txtDescripcion.setBackground(Color.white); 
+                                txtNombre.setBackground(Color.white);
+                                txtCantidad.setBackground(Color.white);
+                                txtPrecio.setBackground(Color.white);
+                                txtDescripcion.setBackground(Color.white);
                                 this.cmbIVA.setSelectedItem("Seleccione IVA:");
                                 this.cmbCategoria.setSelectedItem("Seleccione Categoria");
                                 this.limpiar();
-                            }else{
+                            } else {
                                 JOptionPane.showMessageDialog(null, "Error al guardar");
                             }
-                            
-                            
-                        }catch(HeadlessException | NumberFormatException e){
-                            System.out.println("Error en: "+ e);   
+
+                        } catch (HeadlessException | NumberFormatException e) {
+                            System.out.println("Error en: " + e);
                         }
-                            
+
                     }
                 }
 
@@ -286,32 +321,29 @@ public class NuevoProducto extends javax.swing.JInternalFrame {
         }
 
     }
-    
-    
-    
-    private int obtnerIdCategoria(){
-        String sql = "SELECT * FROM categoria where descripcion = '" + this.cmbCategoria.getSelectedItem()+"'";
+
+    private int obtnerIdCategoria() {
+        String sql = "SELECT * FROM categoria where descripcion = '" + this.cmbCategoria.getSelectedItem() + "'";
         Statement st;
-        try{
+        try {
             Connection cn = Conexion.conectar();
-            st=cn.createStatement();
+            st = cn.createStatement();
             ResultSet rs = st.executeQuery(sql);
-            while(rs.next()){
+            while (rs.next()) {
                 obtenerIdCategoriaCombo = rs.getInt("IdCategoria");
             }
-        }catch(SQLException e){
+        } catch (SQLException e) {
             System.out.println("Error al obtener la categoria");
         }
         return obtenerIdCategoriaCombo;
     }
-    
-    
-    private void limpiar(){
+
+    private void limpiar() {
         txtIdProducto.setText("");
         txtNombre.setText("");
         txtCantidad.setText("");
         txtPrecio.setText("");
         txtDescripcion.setText("");
     }
-    
+
 }

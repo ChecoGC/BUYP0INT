@@ -9,7 +9,7 @@ public class NuevoUsuario extends javax.swing.JInternalFrame {
     public NuevoUsuario() {
         initComponents();
         this.setTitle("Nuevo Usuario");
-        
+
         txtPassword.setVisible(true);
         txtPasswordVisible.setVisible(false);
     }
@@ -156,17 +156,64 @@ public class NuevoUsuario extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
-        // Validaciones existentes (nombre, apellido, usuario, password, etc.)
-    if (txtNombre.getText().isEmpty() || txtApellido.getText().isEmpty() || 
-        txtUsuario.getText().isEmpty() || txtPassword.getText().isEmpty() || 
-        txtTelefono.getText().isEmpty() || cmbRol.getSelectedItem().toString().equals("Seleccione rol:") ) { // <-- Agregada validación de rol
-        
-        JOptionPane.showMessageDialog(null, "Completa todos los campos");
-    } else {
-        
-        // 1. Crear el objeto Usuario y asignar campos existentes
+        if (txtNombre.getText().isEmpty() || txtApellido.getText().isEmpty()
+                || txtUsuario.getText().isEmpty() || txtPassword.getText().isEmpty()
+                || txtTelefono.getText().isEmpty() || cmbRol.getSelectedItem().toString().equals("Seleccione rol:")) {
+
+            JOptionPane.showMessageDialog(null, "Completa todos los campos");
+            return;
+
+        }
+
+// ---------------------- VALIDACIONES NUEVAS --------------------------
+// Nombre y apellido: solo letras y espacios
+        if (!txtNombre.getText().matches("^[a-zA-ZÁÉÍÓÚáéíóúñÑ ]+$")) {
+            JOptionPane.showMessageDialog(null, "El nombre solo debe contener letras");
+            return;
+        }
+
+        if (!txtApellido.getText().matches("^[a-zA-ZÁÉÍÓÚáéíóúñÑ ]+$")) {
+            JOptionPane.showMessageDialog(null, "El apellido solo debe contener letras");
+            return;
+        }
+
+// Usuario: letras y números (sin caracteres especiales)
+        if (!txtUsuario.getText().matches("^[a-zA-Z0-9]+$")) {
+            JOptionPane.showMessageDialog(null, "El usuario solo debe contener letras y números");
+            return;
+        }
+
+// Teléfono: solo números
+        if (!txtTelefono.getText().matches("^[0-9]+$")) {
+            JOptionPane.showMessageDialog(null, "El teléfono solo debe contener números");
+            return;
+        }
+
+// Password: mínimo 6 caracteres
+        if (txtPassword.getText().trim().length() < 6) {
+            JOptionPane.showMessageDialog(null, "La contraseña debe tener mínimo 6 caracteres");
+            return;
+        }
+
+// Hora entrada/salida: formato HH:MM (opcional)
+        if (!txtHoraEntrada.getText().trim().isEmpty()
+                && !txtHoraEntrada.getText().matches("^([01]\\d|2[0-3]):[0-5]\\d$")) {
+
+            JOptionPane.showMessageDialog(null, "Hora de entrada inválida. Formato correcto: HH:MM");
+            return;
+        }
+
+        if (!txtHoraSalida.getText().trim().isEmpty()
+                && !txtHoraSalida.getText().matches("^([01]\\d|2[0-3]):[0-5]\\d$")) {
+
+            JOptionPane.showMessageDialog(null, "Hora de salida inválida. Formato correcto: HH:MM");
+            return;
+        }
+
+// ---------------------- FIN VALIDACIONES --------------------------
+// 1. Crear el objeto Usuario
         Usuario usuario = new Usuario();
-        LoginController controlUsuario = new LoginController(); // Asumiendo que usas LoginController para guardar
+        LoginController controlUsuario = new LoginController();
 
         usuario.setNombre(txtNombre.getText().trim());
         usuario.setApellido(txtApellido.getText().trim());
@@ -174,23 +221,23 @@ public class NuevoUsuario extends javax.swing.JInternalFrame {
         usuario.setPassword(txtPassword.getText().trim());
         usuario.setTelefono(txtTelefono.getText().trim());
         usuario.setEstado(1);
-        
-        // 2. ASIGNAR LOS NUEVOS CAMPOS
-        usuario.setRol(cmbRol.getSelectedItem().toString()); 
-        // Nota: Los campos de hora pueden ser NULL si se dejan vacíos. Si el campo en BD es NOT NULL, debes validar aquí.
-        // Asignaremos NULL si están vacíos, ya que la columna hora_entrada/salida permite NULL en tu SQL.
+
+// 2. Nuevos campos
+        usuario.setRol(cmbRol.getSelectedItem().toString());
+
         usuario.setHora_entrada(txtHoraEntrada.getText().trim().isEmpty() ? null : txtHoraEntrada.getText().trim());
         usuario.setHora_salida(txtHoraSalida.getText().trim().isEmpty() ? null : txtHoraSalida.getText().trim());
 
-        // 3. Guardar
+// 3. Guardar
         if (controlUsuario.guardar(usuario)) {
             JOptionPane.showMessageDialog(null, "¡Usuario registrado con éxito!");
             this.limpiar();
         } else {
             JOptionPane.showMessageDialog(null, "Error al guardar usuario");
         }
-    }
+
         this.limpiar();
+
     }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void txtTelefonoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTelefonoActionPerformed
@@ -215,7 +262,7 @@ public class NuevoUsuario extends javax.swing.JInternalFrame {
             txtPassword.setVisible(true);
             txtPasswordVisible.setVisible(false);
         }
-        
+
     }//GEN-LAST:event_CheckboxVerClaveMouseClicked
 
     private void cmbRolActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbRolActionPerformed
